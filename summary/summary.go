@@ -30,29 +30,33 @@ func GetSummary(stats []models.CovidStat) (*models.CovidSummaryResponse, error) 
 }
 
 func ProvinceCountFunc(provinceCount map[string]int, province string) map[string]int {
+	// avoiding concurrency by pure function
+	tempProvinceCount := provinceCount
 	if province == "" {
-		provinceCount[OTHER] = provinceCount[OTHER] + 1
+		tempProvinceCount[OTHER] = tempProvinceCount[OTHER] + 1
 	} else {
-		provinceCount[province] = provinceCount[province] + 1
+		tempProvinceCount[province] = tempProvinceCount[province] + 1
 	}
 
-	return provinceCount
+	return tempProvinceCount
 }
 
 func AgeGroupCountFunc(ageGroup map[string]int, ptAge *int) map[string]int {
+	// avoiding concurrency by pure function
+	tempAgeGroup := ageGroup
 	if ptAge == nil {
-		ageGroup[OTHER] = ageGroup[OTHER] + 1
+		tempAgeGroup[OTHER] = tempAgeGroup[OTHER] + 1
 		return ageGroup
 	}
 
 	age := *ptAge
 	if age >= 0 && age <= 30 {
-		ageGroup[TEEN] = ageGroup[TEEN] + 1
+		tempAgeGroup[TEEN] = tempAgeGroup[TEEN] + 1
 	} else if age >= 31 && age <= 60 {
-		ageGroup[ADULT] = ageGroup[ADULT] + 1
+		tempAgeGroup[ADULT] = tempAgeGroup[ADULT] + 1
 	} else {
-		ageGroup[OLD] = ageGroup[OLD] + 1
+		tempAgeGroup[OLD] = tempAgeGroup[OLD] + 1
 	}
 
-	return ageGroup
+	return tempAgeGroup
 }
