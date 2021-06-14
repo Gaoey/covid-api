@@ -3,6 +3,7 @@ package summary
 import (
 	"encoding/json"
 	"fmt"
+	"reflect"
 	"testing"
 
 	"github.com/Gaoey/covid-api/models"
@@ -29,7 +30,8 @@ func Test_Covid_Summary(t *testing.T) {
 	twenty := new(int)
 	*fiftyOne = 51
 	*twenty = 20
-	// testcase
+
+	// test cases
 	testcases := []TestCase{
 		{
 			given: []models.CovidStat{
@@ -70,8 +72,14 @@ func Test_Covid_Summary(t *testing.T) {
 		if err != nil {
 			t.Errorf("get summary error: %#v\n", err)
 		}
-		if v.want != result {
-			t.Errorf("given %#v want %#v but get %#v\n", v.given, v.want, result)
+
+		want := v.want.(models.CovidSummaryResponse)
+		if !reflect.DeepEqual(want.Province, result.Province) {
+			t.Errorf("Province: given %#v want %#v but get %#v\n", result.Province, want.Province, result.Province)
+		}
+
+		if !reflect.DeepEqual(want.AgeGroup, result.AgeGroup) {
+			t.Errorf("AgeGroup: given %#v want %#v but get %#v\n", result.AgeGroup, want.AgeGroup, result.AgeGroup)
 		}
 	}
 }
