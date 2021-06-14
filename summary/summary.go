@@ -10,7 +10,7 @@ const (
 )
 
 func GetSummary(stats []models.CovidStat) (*models.CovidSummaryResponse, error) {
-	ageGroup := map[string]int{
+	ageGroupCount := map[string]int{
 		TEEN:  0,
 		ADULT: 0,
 		OLD:   0,
@@ -20,12 +20,12 @@ func GetSummary(stats []models.CovidStat) (*models.CovidSummaryResponse, error) 
 
 	for _, v := range stats {
 		provinceCount = ProvinceCountFunc(provinceCount, v.Province)
-		ageGroup = AgeGroupCountFunc(ageGroup, v.Age)
+		ageGroupCount = AgeGroupCountFunc(ageGroupCount, v.Age)
 	}
 
 	return &models.CovidSummaryResponse{
 		Province: provinceCount,
-		AgeGroup: ageGroup,
+		AgeGroup: ageGroupCount,
 	}, nil
 }
 
